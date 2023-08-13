@@ -31,6 +31,11 @@ session = Session(engine)
 # Calculate the date one year from the last date in data set.
 year_ago = dt.date(2017,8,23) - dt.timedelta(days=365)
 
+# List the operations to calculate - min, max, avg
+temp_stats = [func.min(measurement.tobs), 
+func.max(measurement.tobs), 
+func.avg(measurement.tobs)]
+
 
 #################################################
 # Flask Setup
@@ -131,11 +136,6 @@ def start(start):
     # Create session (link) from Python to the DB
     session = Session(engine)
 
-    # List the operations to calculate - min, max, avg
-    temp_stats = [func.min(measurement.tobs), 
-    func.max(measurement.tobs), 
-    func.avg(measurement.tobs)]
-
     # Perform a query to retrieve min, avg and max temp for a specified start date
     results = session.query(*temp_stats).filter(measurement.date >= start).all()
     
@@ -160,11 +160,6 @@ def start(start):
 def start_end(start,end):
     # Create session (link) from Python to the DB
     session = Session(engine)
-
-    # List the operations min, max, avg
-    temp_stats = [func.min(measurement.tobs), 
-    func.max(measurement.tobs), 
-    func.avg(measurement.tobs)]
 
     # Perform a query to retrieve min, avg and max temp for a specified start-end range
     results = session.query(*temp_stats).filter(and_(measurement.date >= start, measurement.date <= end)).all()
